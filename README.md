@@ -1,0 +1,1 @@
+# get-stale-packages-action
