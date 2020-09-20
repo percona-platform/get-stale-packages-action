@@ -1,0 +1,6 @@
+---
+name: "Get Stale Packages"
+description: "Collect stale package versions"
+runs:
+  using: "node12"
+  main: "index.js"
