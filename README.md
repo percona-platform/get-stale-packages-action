@@ -13,11 +13,11 @@ in the "clean-packages" job with the following steps:
 - name: Collect stale package versions
   env:
     ROBOT_TOKEN: ${{ secrets.ROBOT_TOKEN }}
-  uses: percona-platform/get-stale-packages-action@v1.0.0
+  uses: percona-platform/get-stale-packages-action@v1
 
 - name: Clean stale packages
   if: env.STALE_VERSIONS
-  uses: percona-platform/delete-package-versions@v1.0.3
+  uses: percona-platform/delete-package-versions@v1
   with:
     package-version-ids: ${{ env.STALE_VERSIONS }}
 ```
