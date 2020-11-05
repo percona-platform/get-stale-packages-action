@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sethvargo/go-githubactions"
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 )
@@ -35,12 +35,12 @@ func main() {
 
 	token := os.Getenv("ROBOT_TOKEN")
 	if token == "" {
-		log.Fatal("Environment variable ROBOT_TOKEN is empty.")
+		githubactions.Fatalf("Environment variable ROBOT_TOKEN is empty.")
 	}
 
 	githubRepo := os.Getenv("GITHUB_REPOSITORY")
 	if githubRepo == "" {
-		log.Fatal("Environment variable GITHUB_REPOSITORY is empty.")
+		githubactions.Fatalf("Environment variable GITHUB_REPOSITORY is empty.")
 	}
 
 	githubRepoSlice := strings.Split(githubRepo, "/")
@@ -88,7 +88,7 @@ func main() {
 		for {
 			err := client.Query(context.Background(), &query, variables)
 			if err != nil {
-				log.Fatal(err)
+				githubactions.Fatalf("failed to query packages: %s", err)
 			}
 
 			if len(query.Repository.Packages.Nodes) == 0 {
@@ -136,7 +136,7 @@ func main() {
 
 	staleVersions := strings.Join(versions, ", ")
 	log.Printf("Setting STALE_VERSIONS to %q.", staleVersions)
-	fmt.Printf("::set-env name=STALE_VERSIONS::%s\n", staleVersions)
+	githubactions.SetEnv("STALE_VERSIONS", staleVersions)
 }
 
 // getClient returns Github API client with packages preview enabled.
